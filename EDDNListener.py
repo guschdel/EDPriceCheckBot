@@ -160,7 +160,8 @@ class EDDNListener():
         for commodity in self.minerals:
             if not os.path.exists(commodity):
                 print('Generating file for ' + commodity)
-                os.mknod(commodity)
+                #os.mknod(commodity)
+                open(commodity, 'w')
             else:
                 print('Generating dictionary from existing price list for ' + commodity)
                 self.dict_gen(commodity)

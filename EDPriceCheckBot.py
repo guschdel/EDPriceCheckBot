@@ -28,43 +28,25 @@ class EDPriceCheckBot(discord.Client):
         self.botadminfile = open('botadmin','r')
         self.botadmin = int(self.botadminfile.readline().rstrip())
         self.bgtask1 = self.loop.create_task(self.price_watcher())
+        self.cmdlist = {'ltd': 'lowtemperaturediamond',
+                        'ltds': 'lowtemperaturediamond',
+                        'vopals': 'opal',
+                        'void opals': 'opal',
+                        'vopal': 'opal',
+                        'void opal': 'opal',
+                        'painite': 'painite',
+                        'benitoite': 'benitoite',
+                        'musgravite': 'musgravite',
+                        'grandidierite': 'grandidierite',
+                        'serendibite': 'serendibite',
+                        'tritium': 'tritium'
+        }
 
-    def price_grabber(self,commodity):
-        if commodity.lower() == 'ltd' or commodity.lower() == 'ltds':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('lowtemperaturediamond')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'vopals' or commodity.lower() == 'void opals':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('opal')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'vopal' or commodity.lower() == 'void opal':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('opal')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'painite':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('painite')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'benitoite':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('benitoite')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'musgravite':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('musgravite') 
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'grandidierite':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('grandidierite')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'serendibite':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('serendibite')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        elif commodity.lower() == 'tritium':
-            stationlst,systemlst,pricelst,demandlst,padsizelst,agelst = self.cmdty_reader('tritium')
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
-        else:
-            stationlst = []
-            systemlst = []
-            pricelst = []
-            demandlst = []
-            padsizelst = []
-            agelst = []
-            return stationlst,systemlst,pricelst,demandlst,padsizelst,agelst
+    def price_grabber(self, commodity):
+        comm = commodity.lower()
+        for key in self.cmdlist.keys():
+            if comm == key:
+                return self.cmdty_reader(self.cmdlist[key])
 
     def cmdty_reader(self,cmdty):
         stationlst = []
@@ -92,10 +74,12 @@ class EDPriceCheckBot(discord.Client):
     def file_create_check(self):
         if not os.path.exists('membership.lst'):
             print('Generating membership.lst')
-            os.mknod('membership.lst')
+            #os.mknod('membership.lst')
+            open('membership.lst', 'w')
         if not os.path.exists('dm.lst'):
             print('Generating dm.lst')
-            os.mknod('dm.lst')
+            #os.mknod('dm.lst')
+            open('dm.lst', 'w')
 
     def memberset_gen(self):
         memberfile = open('membership.lst','r')
